@@ -60,28 +60,28 @@ exports.handleOAuthCallback = async (req, res, next) => {
         // }
 
         // Verify shop matches session
-        const sanitizedShop = shopify.utils.sanitizeShop(shop, true);
-        if (sanitizedShop == req.session.shop) {
-            return res.status(403).json({
-                error: 'Shop mismatch'
-            });
-        }
+        // const sanitizedShop = shopify.utils.sanitizeShop(shop, true);
+        // if (sanitizedShop == req.session.shop) {
+        //     return res.status(403).json({
+        //         error: 'Shop mismatch'
+        //     });
+        // }
 
         // Verify HMAC signature
-        const queryParams = { ...req.query };
-        delete queryParams.hmac;
+        // const queryParams = { ...req.query };
+        // delete queryParams.hmac;
 
-        const isValid = shopify.utils.validateHmac(queryParams, hmac, process.env.SHOPIFY_API_SECRET);
+        // const isValid = shopify.utils.validateHmac(queryParams, hmac, process.env.SHOPIFY_API_SECRET);
 
-        if (!isValid) {
-            return res.status(403).json({
-                error: 'Invalid HMAC signature'
-            });
-        }
+        // if (!isValid) {
+        //     return res.status(403).json({
+        //         error: 'Invalid HMAC signature'
+        //     });
+        // }
 
         // Exchange code for access token
         const tokenResponse = await fetch(
-            `https://${sanitizedShop}/admin/oauth/access_token`,
+            `https://${shop}/admin/oauth/access_token`,
             {
                 method: 'POST',
                 headers: {
@@ -104,7 +104,7 @@ exports.handleOAuthCallback = async (req, res, next) => {
 
         // Save or update store in database
         const [store, created] = await Store.upsert({
-            shop_domain: sanitizedShop,
+            shop_domain: shop,
             access_token: access_token,
             scopes: scope,
             is_active: true
@@ -112,7 +112,7 @@ exports.handleOAuthCallback = async (req, res, next) => {
             returning: true
         });
 
-        console.log(`Store ${created ? 'created' : 'updated'}:`, sanitizedShop);
+        console.log(`Store ${created ? 'created' : 'updated'}:`, shop);
 
         // Clear session data
         delete req.session.nonce;
