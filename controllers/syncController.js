@@ -68,7 +68,7 @@ exports.bulkSync = async (req, res, next) => {
             results
         });
     } catch (error) {
-        next(error);
+        next(error.message);
     }
 };
 

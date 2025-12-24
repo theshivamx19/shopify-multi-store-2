@@ -34,10 +34,11 @@ class ProductSyncService {
                     }
                 ]
             });
-
+            // console.log(fullProduct, 'here is full product');
+            // return fullProduct;
             // Transform data for Shopify
             const productData = this.transformProductForShopify(fullProduct);
-
+            
             // Create or update product_store record
             let productStore = await ProductStore.findOne({
                 where: {
@@ -60,7 +61,7 @@ class ProductSyncService {
 
             // Create product in Shopify
             const shopifyProduct = await shopifyService.createProductInShopify(store, productData);
-
+            // return shopifyProduct
             // Extract Shopify product ID
             const shopifyProductId = shopifyProduct.id.split('/').pop();
 

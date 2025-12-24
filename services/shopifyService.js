@@ -52,10 +52,10 @@ class ShopifyService {
           compareAtPrice: variant.compare_at_price ? variant.compare_at_price.toString() : null,
           barcode: variant.barcode || null,
           inventoryPolicy: "DENY",
-          inventoryQuantities: {
+          inventoryQuantities: [{
             availableQuantity: variant.inventory_quantity || 0,
             locationId: activeLocation.id
-          },
+          }],
           inventoryItem: {
             sku: variant.sku || '',
             tracked: true
@@ -165,66 +165,22 @@ class ShopifyService {
     try {
       const client = this.createGraphQLClient(store);
 
-      // Get first active location if no location IDs provided
-      const locations = await this.getLocations(store);
-      const activeLocation = locations.find(loc => loc.isActive);
+      const { title, description, vendor, product_type, status, options, variants, images } = productData;
 
-      if (!activeLocation) {
-        throw new Error('No active location found for store');
-      }
+      // 1. Create Product with Options
+      // Map correctly for productCreate: options is a list of strings
+      const productOptions = options ? options.map(opt => opt.name) : [];
 
-      const { title, description, vendor, product_type, status, options, variants } = productData;
-
-      // 1. Prepare Product Options
-      // Map correctly for productSet: { name, values: [{name: "Value"}] }
-      const productOptions = options.map((opt, index) => ({
-        name: opt.name,
-        values: opt.values.map(val => ({ name: val }))
-      }));
-
-      // 2. Prepare Variants
-      const variantsInput = variants && variants.length > 0
-        ? variants.map((variant, index) => {
-          return {
-            optionValues: variant.optionValues.map(ov => ({
-              optionName: ov.optionName,
-              name: ov.value
-            })),
-            price: variant.price.toString(),
-            compareAtPrice: variant.compare_at_price ? variant.compare_at_price.toString() : null,
-            barcode: variant.barcode || null,
-            inventoryPolicy: "DENY",
-            inventoryQuantities: [{
-              quantity: variant.inventory_quantity || 0, // CORRECT field is 'quantity', not 'availableQuantity'
-              locationId: activeLocation.id
-            }],
-            inventoryItem: {
-              sku: variant.sku || '',
-              tracked: true
-            }
-          };
-        })
-        : [];
-
-      // 3. Construct productSet Mutation
-      // We skip media for now to ensure product + variants sync works (resolving "field not defined" error)
       const mutation = `
-        mutation productSet($synchronous: Boolean!, $input: ProductSetInput!) {
-          productSet(synchronous: $synchronous, input: $input) {
+        mutation productCreate($input: ProductInput!) {
+          productCreate(input: $input) {
             product {
               id
               title
-              variants(first: 100) {
-                edges {
-                  node {
-                    id
-                    title
-                    sku
-                    inventoryItem {
-                      id
-                    }
-                  }
-                }
+              options {
+                id
+                name
+                position
               }
             }
             userErrors {
@@ -236,25 +192,31 @@ class ShopifyService {
       `;
 
       const variables = {
-        synchronous: true,
         input: {
           title,
           descriptionHtml: description || '',
           vendor: vendor || '',
           productType: product_type || '',
           status: status ? status.toUpperCase() : 'ACTIVE',
-          productOptions: productOptions,
-          variants: variantsInput
+          options: productOptions
         }
       };
 
       const response = await client.request(mutation, { variables });
 
-      if (response.data.productSet.userErrors.length > 0) {
-        throw new Error(JSON.stringify(response.data.productSet.userErrors));
+      if (response.data.productCreate.userErrors.length > 0) {
+        throw new Error(JSON.stringify(response.data.productCreate.userErrors));
       }
 
-      return response.data.productSet.product;
+      const product = response.data.productCreate.product;
+
+      // 2. Add Variants
+      // Now that the product exists with defined options, we add the variants with their values
+      if (variants && variants.length > 0) {
+        await this.addVariantsToProduct(store, product.id, variants, images || []);
+      }
+
+      return product;
     } catch (error) {
       console.error('Error creating product in Shopify:', error);
       throw error;
