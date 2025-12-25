@@ -20,7 +20,7 @@ class ShopifyService {
    * Uses productVariantsBulkCreate - SINGLE CALL approach
    * as recommended by Shopify AI assistant
    */
-  async addVariantsToProduct(store, productId, variantsData, images = []) {
+  async addVariantsToProduct(store, productId, variantsData, images = [], productOptions = []) {
     try {
       const client = this.createGraphQLClient(store);
 
@@ -31,6 +31,12 @@ class ShopifyService {
       if (!activeLocation) {
         throw new Error('No active location found for store');
       }
+
+      // Create a map of option names to option IDs
+      const optionNameToId = {};
+      productOptions.forEach(opt => {
+        optionNameToId[opt.name] = opt.id;
+      });
 
       // Prepare media array from images
       const mediaInput = images && images.length > 0
@@ -45,7 +51,7 @@ class ShopifyService {
       const variantsInput = variantsData.map(variant => {
         const variantInput = {
           optionValues: variant.optionValues.map(ov => ({
-            optionName: ov.optionName,
+            optionId: optionNameToId[ov.optionName],  // Use optionId instead of optionName
             name: ov.value
           })),
           price: variant.price.toString(),
@@ -113,6 +119,12 @@ class ShopifyService {
         variants: variantsInput
       };
 
+      console.log('=== Product Variants Bulk Create Debug ===');
+      console.log('Product ID:', productId);
+      console.log('Number of variants:', variantsInput.length);
+      console.log('Variants input:', JSON.stringify(variantsInput, null, 2));
+      console.log('==========================================');
+
       const response = await client.request(mutation, { variables });
 
       if (response.data.productVariantsBulkCreate.userErrors.length > 0) {
@@ -157,9 +169,8 @@ class ShopifyService {
 
   /**
    * Create product in Shopify using GraphQL
-   * Uses productSet mutation - The correct approach for 2025-01 API
-   * Handles Product, Options, Variants in a single call.
-   * Media handling requires stagedUploads for new files. For now, we will link existing URLs if supported or skip media to fix the sync first.
+   * Uses productSet mutation - Creates product with all options and variants in ONE call
+   * This avoids the cyclic errors from productCreate + productVariantsBulkCreate approach
    */
   async createProductInShopify(store, productData) {
     try {
@@ -167,13 +178,42 @@ class ShopifyService {
 
       const { title, description, vendor, product_type, status, options, variants, images } = productData;
 
-      // 1. Create Product with Options
-      // Map correctly for productCreate: options is a list of strings
-      const productOptions = options ? options.map(opt => opt.name) : [];
+      // Get first active location for inventory
+      const locations = await this.getLocations(store);
+      const activeLocation = locations.find(loc => loc.isActive);
+
+      if (!activeLocation) {
+        throw new Error('No active location found for store');
+      }
+
+      // Prepare variants for productSet - uses optionName (not optionId!)
+      const variantsInput = variants.map(variant => ({
+        optionValues: variant.optionValues.map(ov => ({
+          optionName: ov.optionName,
+          name: ov.value
+        })),
+        price: variant.price.toString(),
+        compareAtPrice: variant.compare_at_price ? variant.compare_at_price.toString() : null,
+        barcode: variant.barcode || null,
+        inventoryPolicy: "DENY",
+        inventoryQuantities: [{
+          locationId: activeLocation.id,
+          name: "available",  // productSet uses 'name' not 'availableQuantity'
+          quantity: variant.inventory_quantity || 0
+        }],
+        inventoryItem: {
+          sku: variant.sku || '',
+          tracked: true
+        }
+      }));
+
+      console.log('Creating product with productSet mutation');
+      console.log('Options:', JSON.stringify(options, null, 2));
+      console.log('Variants count:', variantsInput.length);
 
       const mutation = `
-        mutation productCreate($input: ProductInput!) {
-          productCreate(input: $input) {
+        mutation productSet($input: ProductSetInput!, $synchronous: Boolean!) {
+          productSet(synchronous: $synchronous, input: $input) {
             product {
               id
               title
@@ -181,6 +221,18 @@ class ShopifyService {
                 id
                 name
                 position
+              }
+              variants(first: 100) {
+                edges {
+                  node {
+                    id
+                    title
+                    sku
+                    inventoryItem {
+                      id
+                    }
+                  }
+                }
               }
             }
             userErrors {
@@ -192,29 +244,27 @@ class ShopifyService {
       `;
 
       const variables = {
+        synchronous: true,
         input: {
           title,
           descriptionHtml: description || '',
           vendor: vendor || '',
           productType: product_type || '',
           status: status ? status.toUpperCase() : 'ACTIVE',
-          options: productOptions
+          productOptions: options,
+          variants: variantsInput
         }
       };
-
+      console.log("Variables creation========================>")
+      console.log(JSON.stringify(variables, null, 2), 'here are the variables ============>')
       const response = await client.request(mutation, { variables });
 
-      if (response.data.productCreate.userErrors.length > 0) {
-        throw new Error(JSON.stringify(response.data.productCreate.userErrors));
+      if (response.data.productSet.userErrors.length > 0) {
+        throw new Error(JSON.stringify(response.data.productSet.userErrors));
       }
 
-      const product = response.data.productCreate.product;
-
-      // 2. Add Variants
-      // Now that the product exists with defined options, we add the variants with their values
-      if (variants && variants.length > 0) {
-        await this.addVariantsToProduct(store, product.id, variants, images || []);
-      }
+      const product = response.data.productSet.product;
+      console.log(`✅ Product created successfully with ${product.variants.edges.length} variants`);
 
       return product;
     } catch (error) {

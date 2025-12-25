@@ -37,8 +37,9 @@ class ProductSyncService {
             // console.log(fullProduct, 'here is full product');
             // return fullProduct;
             // Transform data for Shopify
+
             const productData = this.transformProductForShopify(fullProduct);
-            
+
             // Create or update product_store record
             let productStore = await ProductStore.findOne({
                 where: {
@@ -197,15 +198,18 @@ class ProductSyncService {
     transformProductForShopify(product) {
         const options = product.options.map(opt => ({
             name: opt.name,
-            position: opt.position,
-            values: opt.values.map(val => val.value)
+            values: opt.values.map(val => ({
+                name: val.value
+            }))
         }));
-
+        console.log('Product options:', JSON.stringify(options, null, 2));
         const variants = product.variants.map(variant => {
             const optionValues = variant.optionValues.map(optVal => ({
                 optionName: optVal.option.name,
                 value: optVal.value.value
             }));
+
+            console.log(`Variant "${variant.title}" option values:`, JSON.stringify(optionValues, null, 2));
 
             return {
                 title: variant.title,

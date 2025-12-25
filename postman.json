@@ -1,0 +1,618 @@
+{
+    "products": [
+        {
+            "title": "Premium Cotton T-Shirt",
+            "description": "<p>High-quality 100% cotton t-shirt. Soft, breathable, and perfect for everyday wear.</p><p>Features: Pre-shrunk fabric, reinforced seams, tag-free comfort.</p>",
+            "productType": "Apparel",
+            "vendor": "StyleCraft",
+            "status": "ACTIVE",
+            "images": [
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/tshirt-front.jpg",
+                    "altText": "Premium Cotton T-Shirt Front View",
+                    "width": 1200,
+                    "height": 1500
+                },
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/tshirt-back.jpg",
+                    "altText": "Premium Cotton T-Shirt Back View",
+                    "width": 1200,
+                    "height": 1500
+                },
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/tshirt-lifestyle.jpg",
+                    "altText": "Premium Cotton T-Shirt Lifestyle Photo",
+                    "width": 1200,
+                    "height": 1500
+                }
+            ],
+            "options": [
+                {
+                    "name": "Color",
+                    "values": [
+                        "Red",
+                        "Blue",
+                        "Black",
+                        "White"
+                    ]
+                },
+                {
+                    "name": "Size",
+                    "values": [
+                        "S",
+                        "M",
+                        "L",
+                        "XL",
+                        "XXL"
+                    ]
+                }
+            ],
+            "variants": [
+                {
+                    "sku": "TSHIRT-RED-S",
+                    "price": "29.99",
+                    "compare_at_price": "39.99",
+                    "cost": "12.00",
+                    "barcode": "1001001001",
+                    "inventory_quantity": 100,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/tshirt-red-s.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Red"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "S"
+                        }
+                    ]
+                },
+                {
+                    "sku": "TSHIRT-RED-M",
+                    "price": "29.99",
+                    "compare_at_price": "39.99",
+                    "cost": "12.00",
+                    "barcode": "1001001002",
+                    "inventory_quantity": 150,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/tshirt-red-m.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Red"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "M"
+                        }
+                    ]
+                },
+                {
+                    "sku": "TSHIRT-BLUE-M",
+                    "price": "29.99",
+                    "compare_at_price": "39.99",
+                    "cost": "12.00",
+                    "barcode": "1001001003",
+                    "inventory_quantity": 120,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/tshirt-blue-m.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Blue"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "M"
+                        }
+                    ]
+                },
+                {
+                    "sku": "TSHIRT-BLUE-L",
+                    "price": "29.99",
+                    "compare_at_price": "39.99",
+                    "cost": "12.00",
+                    "barcode": "1001001004",
+                    "inventory_quantity": 140,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/tshirt-blue-l.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Blue"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "L"
+                        }
+                    ]
+                },
+                {
+                    "sku": "TSHIRT-BLACK-XL",
+                    "price": "29.99",
+                    "compare_at_price": "39.99",
+                    "cost": "12.00",
+                    "barcode": "1001001005",
+                    "inventory_quantity": 80,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/tshirt-black-xl.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Black"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "XL"
+                        }
+                    ]
+                },
+                {
+                    "sku": "TSHIRT-WHITE-L",
+                    "price": "29.99",
+                    "compare_at_price": "39.99",
+                    "cost": "12.00",
+                    "barcode": "1001001006",
+                    "inventory_quantity": 110,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/tshirt-white-l.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "White"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "L"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Wireless Bluetooth Headphones",
+            "description": "<h2>Premium Sound Experience</h2><p>Active noise cancellation, 40-hour battery life, premium sound quality.</p><ul><li>Bluetooth 5.0</li><li>Fast charging</li><li>Foldable design</li><li>Includes carrying case</li></ul>",
+            "productType": "Electronics",
+            "vendor": "TechSound",
+            "status": "ACTIVE",
+            "images": [
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/headphones-main.jpg",
+                    "altText": "Wireless Bluetooth Headphones",
+                    "width": 1200,
+                    "height": 1200
+                },
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/headphones-side.jpg",
+                    "altText": "Headphones Side View",
+                    "width": 1200,
+                    "height": 1200
+                },
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/headphones-case.jpg",
+                    "altText": "Headphones with Case",
+                    "width": 1200,
+                    "height": 1200
+                },
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/headphones-use.jpg",
+                    "altText": "Person Using Headphones",
+                    "width": 1200,
+                    "height": 1200
+                }
+            ],
+            "options": [
+                {
+                    "name": "Color",
+                    "values": [
+                        "Black",
+                        "Silver",
+                        "Rose Gold"
+                    ]
+                }
+            ],
+            "variants": [
+                {
+                    "sku": "HP-BT-BLACK",
+                    "price": "199.99",
+                    "compare_at_price": "299.99",
+                    "cost": "85.00",
+                    "barcode": "2002002001",
+                    "inventory_quantity": 50,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/headphones-black.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Black"
+                        }
+                    ]
+                },
+                {
+                    "sku": "HP-BT-SILVER",
+                    "price": "199.99",
+                    "compare_at_price": "299.99",
+                    "cost": "85.00",
+                    "barcode": "2002002002",
+                    "inventory_quantity": 35,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/headphones-silver.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Silver"
+                        }
+                    ]
+                },
+                {
+                    "sku": "HP-BT-ROSEGOLD",
+                    "price": "199.99",
+                    "compare_at_price": "299.99",
+                    "cost": "85.00",
+                    "barcode": "2002002003",
+                    "inventory_quantity": 25,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/headphones-rosegold.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Rose Gold"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Stainless Steel Water Bottle",
+            "description": "<p>Keep your drinks cold for 24 hours or hot for 12 hours.</p><p><strong>Features:</strong></p><ul><li>Double-wall vacuum insulation</li><li>18/8 food-grade stainless steel</li><li>BPA-free</li><li>Leak-proof cap</li><li>Wide mouth for easy cleaning</li></ul>",
+            "productType": "Accessories",
+            "vendor": "HydroLife",
+            "status": "ACTIVE",
+            "images": [
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/bottle-hero.jpg",
+                    "altText": "Stainless Steel Water Bottle",
+                    "width": 1000,
+                    "height": 1500
+                },
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/bottle-all-colors.jpg",
+                    "altText": "Water Bottle All Colors",
+                    "width": 1500,
+                    "height": 1000
+                },
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/bottle-detail.jpg",
+                    "altText": "Water Bottle Detail",
+                    "width": 1200,
+                    "height": 1200
+                },
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/bottle-lifestyle.jpg",
+                    "altText": "Water Bottle Outdoor Use",
+                    "width": 1200,
+                    "height": 1500
+                },
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/bottle-size-compare.jpg",
+                    "altText": "Water Bottle Size Comparison",
+                    "width": 1200,
+                    "height": 1000
+                }
+            ],
+            "options": [
+                {
+                    "name": "Color",
+                    "values": [
+                        "Matte Black",
+                        "Ocean Blue",
+                        "Forest Green",
+                        "Sunset Orange",
+                        "Pearl White"
+                    ]
+                },
+                {
+                    "name": "Size",
+                    "values": [
+                        "500ml",
+                        "750ml",
+                        "1000ml"
+                    ]
+                },
+                {
+                    "name": "Cap Type",
+                    "values": [
+                        "Standard",
+                        "Sport",
+                        "Straw"
+                    ]
+                }
+            ],
+            "variants": [
+                {
+                    "sku": "WB-BLACK-500-STD",
+                    "price": "24.99",
+                    "compare_at_price": "34.99",
+                    "cost": "9.50",
+                    "barcode": "3003003001",
+                    "inventory_quantity": 200,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/bottle-black-500.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Matte Black"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "500ml"
+                        },
+                        {
+                            "optionName": "Cap Type",
+                            "value": "Standard"
+                        }
+                    ]
+                },
+                {
+                    "sku": "WB-BLACK-750-SPORT",
+                    "price": "29.99",
+                    "compare_at_price": "39.99",
+                    "cost": "11.00",
+                    "barcode": "3003003002",
+                    "inventory_quantity": 150,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/bottle-black-750-sport.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Matte Black"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "750ml"
+                        },
+                        {
+                            "optionName": "Cap Type",
+                            "value": "Sport"
+                        }
+                    ]
+                },
+                {
+                    "sku": "WB-BLUE-1000-STD",
+                    "price": "34.99",
+                    "compare_at_price": "44.99",
+                    "cost": "13.00",
+                    "barcode": "3003003003",
+                    "inventory_quantity": 120,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/bottle-blue-1000.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Ocean Blue"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "1000ml"
+                        },
+                        {
+                            "optionName": "Cap Type",
+                            "value": "Standard"
+                        }
+                    ]
+                },
+                {
+                    "sku": "WB-GREEN-750-STRAW",
+                    "price": "32.99",
+                    "compare_at_price": "42.99",
+                    "cost": "12.50",
+                    "barcode": "3003003004",
+                    "inventory_quantity": 100,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/bottle-green-750-straw.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Forest Green"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "750ml"
+                        },
+                        {
+                            "optionName": "Cap Type",
+                            "value": "Straw"
+                        }
+                    ]
+                },
+                {
+                    "sku": "WB-ORANGE-500-SPORT",
+                    "price": "27.99",
+                    "compare_at_price": "37.99",
+                    "cost": "10.50",
+                    "barcode": "3003003005",
+                    "inventory_quantity": 180,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/bottle-orange-500-sport.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Sunset Orange"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "500ml"
+                        },
+                        {
+                            "optionName": "Cap Type",
+                            "value": "Sport"
+                        }
+                    ]
+                },
+                {
+                    "sku": "WB-WHITE-1000-STRAW",
+                    "price": "36.99",
+                    "compare_at_price": "46.99",
+                    "cost": "13.50",
+                    "barcode": "3003003006",
+                    "inventory_quantity": 90,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/bottle-white-1000-straw.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Pearl White"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "1000ml"
+                        },
+                        {
+                            "optionName": "Cap Type",
+                            "value": "Straw"
+                        }
+                    ]
+                },
+                {
+                    "sku": "WB-BLUE-500-STD",
+                    "price": "24.99",
+                    "compare_at_price": "34.99",
+                    "cost": "9.50",
+                    "barcode": "3003003007",
+                    "inventory_quantity": 220,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/bottle-blue-500.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Ocean Blue"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "500ml"
+                        },
+                        {
+                            "optionName": "Cap Type",
+                            "value": "Standard"
+                        }
+                    ]
+                },
+                {
+                    "sku": "WB-GREEN-1000-SPORT",
+                    "price": "37.99",
+                    "compare_at_price": "47.99",
+                    "cost": "14.00",
+                    "barcode": "3003003008",
+                    "inventory_quantity": 85,
+                    "imageUrl": "https://cdn.shopify.com/s/files/1/0000/0000/variants/bottle-green-1000-sport.jpg",
+                    "optionValues": [
+                        {
+                            "optionName": "Color",
+                            "value": "Forest Green"
+                        },
+                        {
+                            "optionName": "Size",
+                            "value": "1000ml"
+                        },
+                        {
+                            "optionName": "Cap Type",
+                            "value": "Sport"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Premium Cotton T-Shirt",
+            "description": "<p>High-quality 100% cotton t-shirt. Soft, breathable, and perfect for everyday wear.</p><p>Features: Pre-shrunk fabric, reinforced seams, tag-free comfort.</p>",
+            "productType": "Apparel",
+            "vendor": "StyleCraft",
+            "status": "ACTIVE",
+            "images": [
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/tshirt-front.jpg",
+                    "altText": "Premium Cotton T-Shirt Front View",
+                    "width": 1200,
+                    "height": 1500
+                },
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/tshirt-back.jpg",
+                    "altText": "Premium Cotton T-Shirt Back View",
+                    "width": 1200,
+                    "height": 1500
+                },
+                {
+                    "src": "https://cdn.shopify.com/s/files/1/0000/0000/products/tshirt-lifestyle.jpg",
+                    "altText": "Premium Cotton T-Shirt Lifestyle Photo",
+                    "width": 1200,
+                    "height": 1500
+                }
+            ]
+        }
+    ]
+}
+// {
+//   "products": [
+//     {
+//       "title": "Premium Multi-Variant Hoodie",
+//       "description": "A high-quality cotton hoodie with multiple sizes and colors.",
+//       "vendor": "Urban Collective",
+//       "product_type": "Apparel",
+//       "status": "active",
+//       "tags": ["premium", "winter", "unisex"],
+//       "options": [
+//         {
+//           "name": "Size",
+//           "position": 1,
+//           "values": ["Small", "Medium", "Large"]
+//         },
+//         {
+//           "name": "Color",
+//           "position": 2,
+//           "values": ["Midnight Black", "Heather Grey"]
+//         }
+//       ],
+//       "variants": [
+//         {
+//           "title": "Small / Midnight Black",
+//           "sku": "HD-S-BLK",
+//           "price": "59.99",
+//           "compare_at_price": "79.99",
+//           "inventory_quantity": 40,
+//           "weight": 0.5,
+//           "weight_unit": "kg",
+//           "optionValues": [
+//             { "optionName": "Size", "value": "Small" },
+//             { "optionName": "Color", "value": "Midnight Black" }
+//           ]
+//         },
+//         {
+//           "title": "Medium / Heather Grey",
+//           "sku": "HD-M-GRY",
+//           "price": "59.99",
+//           "inventory_quantity": 30,
+//           "optionValues": [
+//             { "optionName": "Size", "value": "Medium" },
+//             { "optionName": "Color", "value": "Heather Grey" }
+//           ]
+//         }
+//       ],
+//       "images": [
+//         {
+//           "url": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000",
+//           "alt_text": "Hoodie Front View",
+//           "position": 1
+//         }
+//       ]
+//     },
+//     {
+//       "title": "Minimalist Canvas Backpack",
+//       "description": "Eco-friendly canvas backpack for everyday use.",
+//       "vendor": "EcoGear",
+//       "product_type": "Accessories",
+//       "status": "active",
+//       "tags": "eco-friendly, sustainable, backpack",
+//       "variants": [
+//         {
+//           "title": "Default Title",
+//           "sku": "BP-CAN-01",
+//           "price": "45.00",
+//           "inventory_quantity": 100,
+//           "weight": 0.8
+//         }
+//       ],
+//       "images": [
+//         {
+//           "url": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1000",
+//           "alt_text": "Canvas Backpack",
+//           "position": 1
+//         }
+//       ]
+//     }
+//   ]
+// }
