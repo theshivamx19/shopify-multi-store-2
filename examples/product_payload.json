@@ -1,0 +1,155 @@
+{
+    "products": [
+        {
+            "title": "Summer Cotton Tee",
+            "description": "A breathable, 100% organic cotton t-shirt perfect for hot summer days.",
+            "vendor": "Urban Styles",
+            "product_type": "Apparel",
+            "status": "active",
+            "tags": "summer, cotton, eco-friendly",
+            "options": [
+                {
+                    "name": "Size",
+                    "position": 1,
+                    "values": [
+                        "S",
+                        "M",
+                        "L",
+                        "XL"
+                    ]
+                },
+                {
+                    "name": "Color",
+                    "position": 2,
+                    "values": [
+                        "Ocean Blue",
+                        "Pure White"
+                    ]
+                }
+            ],
+            "variants": [
+                {
+                    "title": "S / Ocean Blue",
+                    "sku": "TEE-S-BLU",
+                    "price": 24.99,
+          "inventory_quantity: 50,"optionValues": [
+                        {
+                            "optionName": "Size",
+                            "value": "S"
+                        },
+                        {
+                            "optionName": "Color",
+                            "value": "Ocean Blue"
+                        }
+                    ]
+                },
+                {
+                    "title": "M / Ocean Blue",
+                    "sku": "TEE-M-BLU",
+                    "price": 24.99,
+          "inventory_quantity: 45,"optionValues": [
+                        {
+                            "optionName": "Size",
+                            "value": "M"
+                        },
+                        {
+                            "optionName": "Color",
+                            "value": "Ocean Blue"
+                        }
+                    ]
+                },
+                {
+                    "title": "S / Pure White",
+                    "sku": "TEE-S-WHT",
+                    "price": 22.99,
+          "inventory_quantity: 30,"optionValues": [
+                        {
+                            "optionName": "Size",
+                            "value": "S"
+                        },
+                        {
+                            "optionName": "Color",
+                            "value": "Pure White"
+                        }
+                    ]
+                },
+                {
+                    "title": "M / Pure White",
+                    "sku": "TEE-M-WHT",
+                    "price": 22.99,
+          "inventory_quantity: 35,"optionValues": [
+                        {
+                            "optionName": "Size",
+                            "value": "M"
+                        },
+                        {
+                            "optionName": "Color",
+                            "value": "Pure White"
+                        }
+                    ]
+                }
+            ],
+            "images": [
+                {
+                    "url": "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png",
+                    "alt_text": "Front view of Summer Cotton Tee",
+                    "position": 1
+                },
+                {
+                    "url": "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_medium.png",
+                    "alt_text": "Back view of Summer Cotton Tee",
+                    "position": 2
+                }
+            ]
+        },
+        {
+            "title": "Minimalist Ceramic Mug",
+            "description": "Handcrafted ceramic mug with a matte finish. Microwave and dishwasher safe.",
+            "vendor": "Home & Hearth",
+            "product_type": "Kitchenware",
+            "status": "active",
+            "tags": "ceramic, mug, minimalist",
+            "options": [
+                {
+                    "name": "Material",
+                    "position": 1,
+                    "values": [
+                        "Clay",
+                        "Porcelain"
+                    ]
+                }
+            ],
+            "variants": [
+                {
+                    "title": "Clay",
+                    "sku": "MUG-CLAY",
+                    "price": 15.00,
+          "inventory_quantity: 100,"optionValues": [
+                        {
+                            "optionName": "Material",
+                            "value": "Clay"
+                        }
+                    ]
+                },
+                {
+                    "title": "Porcelain",
+                    "sku": "MUG-PORC",
+                    "price": 18.00,
+          "inventory_quantity: 80,"optionValues": [
+                        {
+                            "optionName": "Material",
+                            "value": "Porcelain"
+                        }
+                    ]
+                }
+            ],
+            "images": [
+                {
+                    "url": "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-lifestyle_1_large.png",
+                    "alt_text": "Ceramic Mug on a wooden table",
+                    "position": 1
+                }
+            ]
+        }
+    ]
+}

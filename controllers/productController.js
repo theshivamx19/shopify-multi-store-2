@@ -117,10 +117,18 @@ exports.createProducts = async (req, res, next) => {
 
         await transaction.commit();
 
+        // Optional: Trigger sync if requested
+        let syncResults = null;
+        if (req.query.sync === 'true') {
+            const productSyncService = require('../services/productSyncService');
+            syncResults = await productSyncService.bulkSyncProducts(createdProducts);
+        }
+
         res.status(201).json({
             success: true,
             message: `${createdProducts.length} product(s) created successfully`,
-            product_ids: createdProducts
+            product_ids: createdProducts,
+            sync: syncResults
         });
     } catch (error) {
         await transaction.rollback();

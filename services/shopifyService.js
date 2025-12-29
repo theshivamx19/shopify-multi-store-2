@@ -139,6 +139,198 @@ class ShopifyService {
   }
 
   /**
+   * Attach media (images/videos) to an existing product
+   * Uses productCreateMedia mutation - works with external URLs
+   * Reference: https://shopify.dev/docs/api/admin-graphql/latest/mutations/productCreateMedia
+   * 
+   * @param {Object} store - Store object with shop_domain and access_token
+   * @param {String} productId - Product GID (e.g., "gid://shopify/Product/1234567890")
+   * @param {Array} mediaItems - Array of media objects: [{ url: string, alt: string, mediaContentType: 'IMAGE'|'VIDEO' }]
+   * @returns {Object} Response with media and any errors
+   */
+  async attachMediaToProduct(store, productId, mediaItems) {
+    try {
+      const client = this.createGraphQLClient(store);
+
+      // Prepare media input for productCreateMedia
+      const mediaInput = mediaItems.map(item => ({
+        originalSource: item.url || item.src,
+        alt: item.alt || '',
+        mediaContentType: item.mediaContentType || 'IMAGE'
+      }));
+
+      const mutation = `
+        mutation productCreateMedia($productId: ID!, $media: [CreateMediaInput!]!) {
+          productCreateMedia(productId: $productId, media: $media) {
+            media {
+              alt
+              mediaContentType
+              status
+              ... on MediaImage {
+                id
+                image {
+                  url
+                  altText
+                }
+              }
+              ... on Video {
+                id
+                sources {
+                  url
+                }
+              }
+              ... on ExternalVideo {
+                id
+                originUrl
+              }
+            }
+            product {
+              id
+              title
+            }
+            mediaUserErrors {
+              code
+              field
+              message
+            }
+          }
+        }
+      `;
+
+      const variables = {
+        productId,
+        media: mediaInput
+      };
+
+      console.log('=== Attaching Media to Product ===');
+      console.log('Product ID:', productId);
+      console.log('Number of media items:', mediaInput.length);
+      console.log('Media input:', JSON.stringify(mediaInput, null, 2));
+
+      const response = await client.request(mutation, { variables });
+
+      if (response.data.productCreateMedia.mediaUserErrors.length > 0) {
+        console.error('Media User Errors:', response.data.productCreateMedia.mediaUserErrors);
+        throw new Error(JSON.stringify(response.data.productCreateMedia.mediaUserErrors));
+      }
+
+      console.log('✅ Media attached successfully');
+      console.log('Media status:', response.data.productCreateMedia.media.map(m => ({
+        type: m.mediaContentType,
+        status: m.status
+      })));
+
+      return response.data.productCreateMedia;
+    } catch (error) {
+      console.error('Error attaching media to product:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create staged upload URLs for uploading files to Shopify
+   * Step 1 of the upload flow - generates secure upload URLs
+   * Reference: https://shopify.dev/docs/api/admin-graphql/latest/mutations/stagedUploadsCreate
+   * 
+   * @param {Object} store - Store object
+   * @param {Array} files - Array of file objects: [{ filename: string, mimeType: string, fileSize: number, resource: 'IMAGE'|'VIDEO' }]
+   * @returns {Array} Array of staged targets with upload URLs and parameters
+   */
+  async createStagedUploads(store, files) {
+    try {
+      const client = this.createGraphQLClient(store);
+
+      // Prepare input for stagedUploadsCreate
+      const input = files.map(file => ({
+        filename: file.filename,
+        mimeType: file.mimeType,
+        resource: file.resource || 'IMAGE',
+        fileSize: file.fileSize.toString(), // Must be string for UnsignedInt64
+        httpMethod: 'POST'
+      }));
+
+      const mutation = `
+        mutation stagedUploadsCreate($input: [StagedUploadInput!]!) {
+          stagedUploadsCreate(input: $input) {
+            stagedTargets {
+              url
+              resourceUrl
+              parameters {
+                name
+                value
+              }
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      `;
+
+      const variables = { input };
+
+      console.log('=== Creating Staged Uploads ===');
+      console.log('Number of files:', files.length);
+      console.log('Files:', JSON.stringify(input, null, 2));
+
+      const response = await client.request(mutation, { variables });
+
+      if (response.data.stagedUploadsCreate.userErrors.length > 0) {
+        console.error('Staged Upload Errors:', response.data.stagedUploadsCreate.userErrors);
+        throw new Error(JSON.stringify(response.data.stagedUploadsCreate.userErrors));
+      }
+
+      console.log('✅ Staged upload URLs created successfully');
+      return response.data.stagedUploadsCreate.stagedTargets;
+    } catch (error) {
+      console.error('Error creating staged uploads:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Upload a file to Shopify using staged upload URL
+   * Step 2 of the upload flow - performs the actual HTTP upload
+   * 
+   * @param {Object} stagedTarget - Staged target from createStagedUploads
+   * @param {Buffer|Stream} fileData - File data to upload
+   * @returns {String} resourceUrl to use in productCreateMedia
+   */
+  async uploadFileToStaged(stagedTarget, fileData) {
+    try {
+      const FormData = require('form-data');
+      const form = new FormData();
+
+      // Add all parameters from staged upload
+      stagedTarget.parameters.forEach(param => {
+        form.append(param.name, param.value);
+      });
+
+      // Add the file data
+      form.append('file', fileData);
+
+      console.log('=== Uploading File to Staged URL ===');
+      console.log('Upload URL:', stagedTarget.url);
+
+      const response = await axios.post(stagedTarget.url, form, {
+        headers: form.getHeaders(),
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
+      });
+
+      console.log('✅ File uploaded successfully');
+      console.log('Status:', response.status);
+
+      // Return the resourceUrl which will be used in productCreateMedia
+      return stagedTarget.resourceUrl;
+    } catch (error) {
+      console.error('Error uploading file to staged URL:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Fetch all locations for a store
    */
   async getLocations(store) {
@@ -265,6 +457,18 @@ class ShopifyService {
 
       const product = response.data.productSet.product;
       console.log(`✅ Product created successfully with ${product.variants.edges.length} variants`);
+
+      // Step 2: Attach images to the product if provided
+      if (images && images.length > 0) {
+        console.log(`📸 Attaching ${images.length} images to product...`);
+        try {
+          await this.attachMediaToProduct(store, product.id, images);
+          console.log('✅ Images attached successfully');
+        } catch (imageError) {
+          console.error('⚠️ Warning: Failed to attach images:', imageError.message);
+          // Don't throw - product was created successfully, just log the image error
+        }
+      }
 
       return product;
     } catch (error) {

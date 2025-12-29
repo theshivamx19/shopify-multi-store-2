@@ -1,5 +1,5 @@
 const shopifyService = require('./shopifyService');
-const { Product, ProductOption, ProductOptionValue, ProductVariant, ProductVariantOptionValue, Store, ProductStore, VariantStore } = require('../models');
+const { Product, ProductOption, ProductOptionValue, ProductVariant, ProductVariantOptionValue, ProductImage, Store, ProductStore, VariantStore } = require('../models');
 const db = require('../models');
 
 class ProductSyncService {
@@ -10,35 +10,43 @@ class ProductSyncService {
         try {
             console.log(`Syncing product ${product.id} to store ${store.shop_domain}`);
 
-            // Load full product data with options and variants
+            // Load full product data with options, variants, and images
             const fullProduct = await Product.findByPk(product.id, {
                 include: [
                     {
                         model: ProductOption,
                         as: 'options',
-                        include: [{ model: ProductOptionValue, as: 'values' }]
+                        include: [{
+                            model: ProductOptionValue,
+                            as: 'values'
+                        }]
                     },
                     {
                         model: ProductVariant,
                         as: 'variants',
-                        include: [
-                            {
-                                model: ProductVariantOptionValue,
-                                as: 'optionValues',
-                                include: [
-                                    { model: ProductOption, as: 'option' },
-                                    { model: ProductOptionValue, as: 'value' }
-                                ]
-                            }
-                        ]
+                        include: [{
+                            model: ProductVariantOptionValue,
+                            as: 'optionValues',
+                            include: [
+                                { model: ProductOption, as: 'option' },
+                                { model: ProductOptionValue, as: 'value' }
+                            ]
+                        }]
+                    },
+                    {
+                        model: ProductImage,
+                        as: 'images'
                     }
                 ]
             });
-            // console.log(fullProduct, 'here is full product');
-            // return fullProduct;
-            // Transform data for Shopify
+            if (!fullProduct) {
+                throw new Error('Product not found in database');
+            }
 
-            const productData = this.transformProductForShopify(fullProduct);
+            const productWithDetails = await fullProduct.getFullProduct();
+
+            // Transform data for Shopify
+            const productData = this.transformProductForShopify(productWithDetails);
 
             // Create or update product_store record
             let productStore = await ProductStore.findOne({
@@ -62,19 +70,30 @@ class ProductSyncService {
 
             // Create product in Shopify
             const shopifyProduct = await shopifyService.createProductInShopify(store, productData);
+            console.log('DEBUG: shopifyProduct returned', shopifyProduct ? 'yes' : 'no');
             // return shopifyProduct
             // Extract Shopify product ID
+            if (!shopifyProduct || !shopifyProduct.id) {
+                console.error('DEBUG: shopifyProduct or id is missing', JSON.stringify(shopifyProduct));
+                throw new Error('Invalid Shopify product response');
+            }
             const shopifyProductId = shopifyProduct.id.split('/').pop();
+            console.log('DEBUG: shopifyProductId', shopifyProductId);
 
             // Update product_store with success
             productStore.shopify_product_id = shopifyProductId;
             productStore.sync_status = 'synced';
             productStore.synced_at = new Date();
             await productStore.save();
+            console.log('DEBUG: productStore saved');
 
             // Create/update variant_stores for tracking
-            const variantEdges = shopifyProduct.variants.edges;
+            const variantEdges = shopifyProduct.variants?.edges;
+            if (!variantEdges) console.log('DEBUG: variantEdges missing');
+
+            console.log(fullProduct.variants, 'hre are the vairants ===')
             for (let i = 0; i < fullProduct.variants.length; i++) {
+                console.log(`DEBUG: Processing variant ${i}`);
                 const localVariant = fullProduct.variants[i];
                 const shopifyVariantNode = variantEdges[i]?.node;
 
@@ -224,14 +243,21 @@ class ProductSyncService {
             };
         });
 
+        const images = product.images.map(img => ({
+            url: img.url,
+            alt: img.alt_text || ''
+        }));
+
         return {
             title: product.title,
             description: product.description,
             vendor: product.vendor,
             product_type: product.product_type,
             status: product.status,
+            tags: product.tags, // Added tags (array)
             options,
-            variants
+            variants,
+            images
         };
     }
 }
